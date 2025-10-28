@@ -1,0 +1,9 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base light/dark theme using Material 3 -->
+    <style name="Theme.PocketPlant" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your app theme colors -->
+        <item name="colorPrimary">@color/green_500</item>
+        <item name="colorSecondary">@color/green_300</item>
+        <item name="android:statusBarColor">?attr/colorSurfaceVariant</item>
+    </style>
+</resources>

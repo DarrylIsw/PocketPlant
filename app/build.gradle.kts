@@ -67,6 +67,12 @@ dependencies {
     // Material
     implementation("com.google.android.material:material:1.12.0")
 
-    implementation("io.coil-kt:coil-compose:2.4.0")
+    // implementation("io.coil-kt:coil-compose:2.4.0")
 
+    implementation("com.google.accompanist:accompanist-flowlayout:0.31.5-beta")
+
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.6")
+    implementation("androidx.compose.runtime:runtime-livedata")
+    implementation("com.google.accompanist:accompanist-flowlayout:0.30.1")
+    implementation("io.coil-kt:coil-compose:2.6.0")
 }

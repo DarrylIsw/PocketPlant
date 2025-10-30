@@ -6,18 +6,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.example.pocketplant.model.Plant
+import com.example.pocketplant.R
 import com.example.pocketplant.ui.AddPlantScreen
 import com.example.pocketplant.ui.theme.PocketPlantTheme
+import com.example.pocketplant.viewmodel.PlantViewModel
 
 class AddPlantFragment : Fragment() {
 
-    // Shared list of plants (use ViewModel in real app)
-    private val plantList = mutableStateListOf<Plant>()
+    private val plantViewModel: PlantViewModel by activityViewModels()
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
@@ -25,16 +25,23 @@ class AddPlantFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // IMPORTANT: create ComposeView and explicitly call its member function
-        val composeView = ComposeView(requireContext())
-        composeView.setContent {
-            PocketPlantTheme {
-                AddPlantScreen { plant ->
-                    plantList.add(plant)
-                    findNavController().navigateUp()
+        return ComposeView(requireContext()).apply {
+            setContent {
+                PocketPlantTheme {
+                    AddPlantScreen(
+                        navController = findNavController(),
+                        viewModel = plantViewModel,
+                        onAddPlant = { plant ->
+                            plantViewModel.addPlant(plant)
+                            findNavController().navigate(
+                                R.id.action_addPlantFragment_to_plantDetailFragment,
+                                Bundle().apply { putInt("plantId", plant.id) }
+                            )
+                        }
+                    )
+
                 }
             }
         }
-        return composeView
     }
 }

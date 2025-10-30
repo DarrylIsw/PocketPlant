@@ -1,20 +1,61 @@
 package com.example.pocketplant
 
+import android.os.Build
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.*
+import com.example.pocketplant.ui.*
+import com.example.pocketplant.viewmodel.PlantViewModel
+import com.example.pocketplant.ui.theme.PocketPlantTheme
 
-class MainActivity : AppCompatActivity() {
+@RequiresApi(Build.VERSION_CODES.O)
+class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+        setContent {
+            PocketPlantTheme {
+                val viewModel: PlantViewModel = viewModel()
+                val navController = rememberNavController()
+
+                NavHost(
+                    navController = navController,
+                    startDestination = "home"
+                ) {
+                    composable("home") {
+                        HomeScreen(
+                            viewModel = viewModel,
+                            onAddClick = { navController.navigate("add") },
+                            onPlantClick = { id -> navController.navigate("detail/$id") }
+                        )
+                    }
+
+                    composable("add") {
+                        AddPlantScreen(
+                            navController = navController,
+                            viewModel = viewModel,
+                            onAddPlant = { plant ->
+                                viewModel.addPlant(plant)
+                                navController.popBackStack()
+                            }
+                        )
+                    }
+
+                    composable("detail/{plantId}") { backStackEntry ->
+                        val plantId = backStackEntry.arguments
+                            ?.getString("plantId")
+                            ?.toIntOrNull() ?: return@composable
+
+                        PlantDetailScreen(
+                            navController = navController,
+                            plantId = plantId,
+                            viewModel = viewModel
+                        )
+                    }
+                }
+            }
         }
     }
 }

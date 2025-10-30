@@ -12,7 +12,13 @@
     <fragment
         android:id="@+id/addPlantFragment"
         android:name="com.example.pocketplant.fragments.AddPlantFragment"
-        android:label="Add Plant" />
+        android:label="Add Plant">
+
+        <action
+            android:id="@+id/action_addPlantFragment_to_plantDetailFragment"
+            app:destination="@id/plantDetailFragment" />
+    </fragment>
+
 
     <fragment
         android:id="@+id/plantDetailFragment"

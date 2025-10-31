@@ -149,7 +149,7 @@ fun HomeHeader(plantsCount: Int) {
             Column {
                 Text(
                     text = "🌿 PocketPlant",
-                    style = MaterialTheme.typography.headlineSmall,
+                    style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.primary
                 )
                 Text(

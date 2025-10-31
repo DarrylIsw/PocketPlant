@@ -40,6 +40,7 @@ fun HomeScreen(
     onPlantClick: (Int) -> Unit
 ) {
     val plants by viewModel.plants.observeAsState(emptyList())
+    val growthProgress = remember { mutableStateMapOf<Int, Float>() } // 🌱 track growth per plant
     val deletedPlants = remember { mutableStateListOf<Int>() }
 
     Scaffold(
@@ -85,6 +86,8 @@ fun HomeScreen(
                                 } else false
                             }
 
+                            val progress = growthProgress[plant.id] ?: 0f // Default 0%
+
                             SwipeToDismiss(
                                 state = dismissState,
                                 background = {
@@ -116,18 +119,17 @@ fun HomeScreen(
                                     }
                                 },
                                 dismissContent = {
-                                    // 👇 Ensure PlantCard uses white surface
+                                    // ✅ Card with Growth Progress integrated
                                     PlantCard(
                                         name = plant.name,
                                         type = plant.type,
                                         wateringHours = plant.wateringHours,
                                         imageUri = plant.imageUri,
-                                        onClick = { onPlantClick(plant.id) },
-                                        backgroundColor = MaterialTheme.colorScheme.surface,
-                                        hourTextStyle = MaterialTheme.typography.bodyLarge.copy(
-                                            color = MaterialTheme.colorScheme.primary,
-                                            fontWeight = androidx.compose.ui.text.font.FontWeight.Medium
-                                        )
+                                        progress = progress,
+                                        onProgressChange = { newValue ->
+                                            growthProgress[plant.id] = newValue
+                                        },
+                                        onClick = { onPlantClick(plant.id) }
                                     )
                                 },
                                 directions = setOf(DismissDirection.EndToStart)
@@ -139,6 +141,7 @@ fun HomeScreen(
         }
     }
 }
+
 
 // 🌿 Modern Header Section with subtitle
 @OptIn(ExperimentalMaterial3Api::class)
@@ -177,13 +180,15 @@ fun PlantCard(
     wateringHours: List<String>,
     imageUri: Any?,
     onClick: () -> Unit,
+    progress: Float, // ✅ growth progress value
+    onProgressChange: (Float) -> Unit, // ✅ callback when user moves slider
     backgroundColor: Color = MaterialTheme.colorScheme.surface,
     hourTextStyle: TextStyle = MaterialTheme.typography.bodyLarge
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(260.dp)
+            .height(320.dp) // ⬆️ Taller card to fit everything comfortably
             .clip(RoundedCornerShape(24.dp))
             .clickable { onClick() },
         colors = CardDefaults.cardColors(containerColor = backgroundColor),
@@ -191,7 +196,7 @@ fun PlantCard(
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
 
-            // 🌿 Top Image Section
+            // 🌿 Image Section
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -205,7 +210,6 @@ fun PlantCard(
                         contentScale = ContentScale.Crop,
                         modifier = Modifier.fillMaxSize()
                     )
-                    // Optional: Gradient overlay for aesthetic
                     Box(
                         modifier = Modifier
                             .matchParentSize()
@@ -236,11 +240,11 @@ fun PlantCard(
                 }
             }
 
-            // 🌱 Bottom Info Section
+            // 🌱 Info + Growth Section
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.surface) // ✅ white / neutral background
+                    .background(MaterialTheme.colorScheme.surface)
                     .padding(horizontal = 16.dp, vertical = 12.dp)
             ) {
                 Text(
@@ -261,7 +265,7 @@ fun PlantCard(
 
                 Spacer(Modifier.height(10.dp))
 
-                // 💧 Bigger Hour Pills
+                // 💧 Watering times
                 if (wateringHours.isNotEmpty()) {
                     FlowRow(
                         horizontalArrangement = Arrangement.spacedBy(10.dp),
@@ -286,10 +290,49 @@ fun PlantCard(
                         }
                     }
                 }
+
+                Spacer(Modifier.height(16.dp))
+
+                // 🌿 Growth Tracker Section
+                Text(
+                    text = "Growth Percentage",
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                )
+
+                Spacer(Modifier.height(6.dp))
+
+// 🌱 Slider with dynamic percentage
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Slider(
+                        value = progress,
+                        onValueChange = { onProgressChange(it) },
+                        modifier = Modifier.weight(1f),
+                        colors = SliderDefaults.colors(
+                            thumbColor = MaterialTheme.colorScheme.primary,
+                            activeTrackColor = MaterialTheme.colorScheme.primary
+                        )
+                    )
+
+                    Spacer(Modifier.width(10.dp))
+
+                    Text(
+                        text = "${(progress * 100).toInt()}%",
+                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium),
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
             }
         }
     }
 }
+
+
 
 
 

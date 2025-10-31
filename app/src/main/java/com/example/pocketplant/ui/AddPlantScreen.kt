@@ -55,7 +55,10 @@ fun AddPlantScreen(
     var typeExpanded by remember { mutableStateOf(false) }
     var sunlightExpanded by remember { mutableStateOf(false) }
 
-    val plantTypes = listOf("Succulent", "Cactus", "Fern", "Herb", "Tree", "Other")
+    val plantTypes = listOf(
+        "Succulent", "Cactus", "Fern", "Ornamental Grass", "Flowering Plant",
+        "Herb", "Shrub", "Tree", "Indoor Plant", "Vine/Climber", "Aquatic Plant", "Other"
+    )
     val sunlightOptions = listOf("Full Sun", "Partial Shade", "Low Light")
     val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
 

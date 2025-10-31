@@ -69,7 +69,13 @@ fun AddPlantScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Add New Plant", fontWeight = FontWeight.Bold) },
+                title = {
+                    Text(
+                        text = "Add New Plant",
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary // ✅ primary color
+                    )
+                },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Back")

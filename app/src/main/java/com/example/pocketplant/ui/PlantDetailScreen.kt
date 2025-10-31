@@ -77,7 +77,13 @@ fun PlantDetailScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Edit Plant", fontWeight = FontWeight.Bold) },
+                title = {
+                    Text(
+                        text = "Edit Plant",
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary // ✅ primary color
+                    )
+                },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Back")

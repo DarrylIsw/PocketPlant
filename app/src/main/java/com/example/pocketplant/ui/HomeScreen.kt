@@ -9,6 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import com.example.pocketplant.R
 import androidx.compose.ui.draw.shadow
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -30,7 +31,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.material.icons.filled.LocalFlorist
 import androidx.compose.ui.text.font.FontWeight
-
+import androidx.compose.ui.draw.alpha
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
@@ -66,6 +67,16 @@ fun HomeScreen(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
+                    Image(
+                        painter = rememberAsyncImagePainter(R.drawable.placeholder_plant), // your PNG in drawable/res
+                        contentDescription = null,
+                        modifier = Modifier
+                            .fillMaxWidth(0.75f) // size relative to screen width
+                            .aspectRatio(1f)    // keep ratio
+                            .alpha(0.08f),      // very faint
+                        contentScale = ContentScale.Fit
+                    )
+
                     Text(
                         "No plants yet. Add one!",
                         style = MaterialTheme.typography.bodyLarge,
@@ -151,7 +162,7 @@ fun HomeHeader(plantsCount: Int) {
         title = {
             Column {
                 Text(
-                    text = "🌿 PocketPlant",
+                    text = "🌿 Plant Growth Tracker",
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.primary
                 )

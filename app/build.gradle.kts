@@ -51,6 +51,7 @@ dependencies {
     // Navigation
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.compose.ui.graphics)
+    implementation(libs.androidx.compose.ui.text)
 
     // Debug tools
     debugImplementation(libs.androidx.compose.ui.tooling)
@@ -75,4 +76,5 @@ dependencies {
     implementation("androidx.compose.runtime:runtime-livedata")
     implementation("com.google.accompanist:accompanist-flowlayout:0.30.1")
     implementation("io.coil-kt:coil-compose:2.6.0")
+    implementation("androidx.compose.material:material")
 }
